@@ -2,18 +2,18 @@ function carStartListener(){
     var randomNamber = Math.random()
 
     if (randomNamber > 0.5){
-        alert('car have started')
+        console.log('car have started')
 
         startButton.classList.add('hide')
 
         function engineCrashed(){
             startButton.classList.remove('hide')
-            alert('engine crashed')
+            console.log('engine crashed')
         }
-        window.setTimeout(engineCrashed, 5000)
-        alert('we wait crash')
+        window.setTimeout(engineCrashed, 2000)
+        console.log('we wait crash')
     }else{
-        alert('something wrong')
+        console.log('something wrong')
     }
 }
 
