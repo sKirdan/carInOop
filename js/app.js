@@ -7,51 +7,80 @@ function carStartListener() {
         carCannotBeStarted()
     }
 }
-function drawLabel(status) {
-    statusLable.innerHTML = status;
-
+function drawStatus(status) {
+    processEls(statusLabels, function (statusLabel) {
+        statusLabel.innerHTML = status
+    })
 }
+
+
+
 function devLog(messege) {
     console.log(messege)
 }
 function carStarted() {
-    drawLabel('car have started')
+    drawStatus('car have started')
     devLog('car have started')
 
-    startButton.classList.add('hide')
+    processEls(startButtons, function (startButton) {
+        startButton.classList.add("hide")
+    })
+
 
     gearBoxStarted()
 
     plannedCrashStarted()
     devLog('we wait crash')
 }
+function processEls(arrayOfEls, proccessor) {
+    for (var i = 0; i < arrayOfEls.length; i++) {
+        var item = arrayOfEls[i];
+        proccessor(item)
+    }
+}
 function carCannotBeStarted() {
     devLog('something wrong')
-    drawLabel('Car cant be started. Try again')
+    drawStatus('Car cant be started. Try again')
 }
 function gearBoxStarted() {
     var gearBoxValue = 1
-    gearBoxValueLable.innerHTML = gearBoxValue
+    processEls(gearBoxValueLabels, function (gearBoxValueLabel) {
+        gearBoxValueLabel.innerHTML = gearBoxValue
+    })
+
     function incrementGearBoxValue() {
         if (gearBoxValue < 5) {
             gearBoxValue++
-            gearBoxValueLable.innerHTML = gearBoxValue
+            processEls(gearBoxValueLabels, function (gearBoxValueLabel) {
+                gearBoxValueLabel.innerHTML = gearBoxValue
+            })
+
         }
     }
     gearBoxInterval = window.setInterval(incrementGearBoxValue, 1000)
 }
 function plannedCrashStarted() {
     function engineCrashed() {
-        startButton.classList.remove('hide')
         devLog('engine crashed')
-        drawLabel('Engine have crashed. Car stopped')
-        gearBoxValueLable.innerHTML = 'N'
+        drawStatus('Engine have crashed. Car stopped')
+
+        processEls(startButtons, function (startButton) {
+            startButton.classList.remove("hide")
+        })
+        processEls(gearBoxValueLabels, function (gearBoxValueLabel) {
+            gearBoxValueLabel.innerHTML = 'N'
+        })
+
         window.clearInterval(gearBoxInterval)
     }
     window.setTimeout(engineCrashed, 3000)
 }
 var gearBoxInterval
-var startButton = document.querySelector('#start-car')
-var statusLable = document.querySelector('#status')
-var gearBoxValueLable = document.querySelector('#gear-box-value')
-startButton.addEventListener('click', carStartListener)
+var startButtons = document.querySelector("[data-role ='start-car']")
+var statusLabels = document.querySelector("[data-role = 'status']")
+var gearBoxValueLabels = document.querySelector("[data-role ='gear-box-value']")
+
+processEls(startButtons, function (startButton) {
+    startButton.addEventListener("click", carStartListener)
+})
+
