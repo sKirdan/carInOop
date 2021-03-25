@@ -2,7 +2,10 @@ function Car(containerId) {
     this._engine = new Engine;
     this._gearBox = new GearBox;
 
-    this._render(containerId);
+    this._view = new CarView();
+
+    this._logger = new Logger;
+    this._view.render(containerId);
 
 }
 
@@ -18,26 +21,11 @@ Car.prototype = {
     },
 
     _carStarted: function () {
-        console.log('ok')
+        this._logger.log('ok')
+        this._view.drawStatus('Car cant be started. Try again')
     },
     _carCannotBeStarted: function () {
-        console.log('ko')
-    },
-
-    _render: function (containerId) {
-        var container = document.getElementById(containerId)
-        container.innerHTML= `
-        <div class = 'car'>
-            <div class="info-panel">
-                <lable>status:</lable> <span data-role='status'> off</span>
-            </div>
-            <div class="controls">
-                <input data-role='start-car' type='button' value='start'>
-                <hr>
-                <label>Gear box: </label> <span data-role='gear-box-value'>N</span>
-            </div> 
-        </div>
-        `;
+        this._logger.log('ko')
     },
 
 }

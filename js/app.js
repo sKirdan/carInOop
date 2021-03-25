@@ -1,7 +1,8 @@
-(function(){
-    var car1 = new Car
 
-    car1.start('car1')
+(function(){
+    var car1 = new Car('car1')
+
+    car1.start()
 
 
 
