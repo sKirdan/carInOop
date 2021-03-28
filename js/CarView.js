@@ -19,7 +19,12 @@ CarView.prototype = {
         this._startButtons = document.getElementById(containerId).querySelectorAll("[data-role ='start-car']");
         this._statusLabels = document.getElementById(containerId).querySelectorAll("[data-role = 'status']");
         this._gearBoxValueLabels = document.getElementById(containerId).querySelectorAll("[data-role ='gear-box-value']");
+
+        this._processEls(this._startButtons, function (startButton) {
+            startButton.addEventListener("click", carStartListener)
+        })
     },
+    
 
     drawStatus: function (status) {
         this._processEls(this._statusLabels, function (statusLabel) {
