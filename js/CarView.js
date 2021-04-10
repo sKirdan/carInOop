@@ -1,4 +1,5 @@
-function CarView() {
+function CarView(carStartedListener) {
+    this._carStartedListeners = [];
 
 }
 CarView.prototype = {
@@ -20,23 +21,43 @@ CarView.prototype = {
         this._statusLabels = document.getElementById(containerId).querySelectorAll("[data-role = 'status']");
         this._gearBoxValueLabels = document.getElementById(containerId).querySelectorAll("[data-role ='gear-box-value']");
 
+        var that = this;
+
         this._processEls(this._startButtons, function (startButton) {
-            startButton.addEventListener("click", carStartListener)
+            startButton.addEventListener("click", function (ev) {
+                that._carStartListener(ev)
+            })
         })
     },
-    
+
 
     drawStatus: function (status) {
         this._processEls(this._statusLabels, function (statusLabel) {
             statusLabel.innerHTML = status
         })
     },
+    addEventListener: function(eventName, listener){
+        if(eventName == "start"){
+            this._carStartedListeners.push(listener)
+        }
+    },
+    onCarStarted: function(){
+        this._processEls(this._startButtons, function(item){
+            item.disabled = true
+        })
+    },
 
     _processEls: function (arrayOfEls, proccessor) {
         for (var i = 0; i < arrayOfEls.length; i++) {
             var item = arrayOfEls[i];
-            proccessor(item)
+            proccessor.apply(this, [item])
+        }
+    },
+    _carStartListener: function (ev) {
+
+        for (var i = 0; i < this._carStartedListeners.length; i++){
+            var listener = this._carStartedListeners[i]
+            listener();
         }
     }
-
-}
+};
